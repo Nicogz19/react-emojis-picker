@@ -7,6 +7,7 @@ export class EmojiPickerContainer extends React.Component {
         this.handleChangeEmoticon = this.handleChangeEmoticon.bind(this);
         this.handleChangeMensajeWhatsapp = this.handleChangeMensajeWhatsapp.bind(this);
         this.showEmojis = this.showEmojis.bind(this);
+        this.hideEmojis = this.hideEmojis.bind(this);
 
         this.state = {
             openModalIcons: false,
@@ -14,21 +15,21 @@ export class EmojiPickerContainer extends React.Component {
             mensaje: '',
             show: false,
             cursorPosition: 0,
+            modal: this.props.modal,
         }
     }
     
     handleChangeEmoticon(event){
         const mensajeWspp = this.state.mensaje ? this.state.mensaje : '';
         const cursor = this.state.cursorPosition
-
+        
         //separo el mensaje en dos partes para luego insertar el emoticon dependiendo la posicion del cursor
         const mensajeDesglosado1 = mensajeWspp.substring(0, cursor)
         const mensajeDesglosado2 = mensajeWspp.substring(cursor, mensajeWspp.length)
-
+   
         this.setState({
             emoticonSelected: event.target.value,
             mensaje: mensajeWspp ? mensajeDesglosado1.concat(event.target.value, mensajeDesglosado2) : event.target.value,
-            show: false,
         })
     }
 
@@ -42,6 +43,12 @@ export class EmojiPickerContainer extends React.Component {
         })
     }
 
+    hideEmojis(){
+        this.setState({
+            show: false
+        })
+    }
+
     showEmojis(){
         this.setState({
             show: !this.state.show
@@ -49,15 +56,17 @@ export class EmojiPickerContainer extends React.Component {
     }
 
     render() {
-        const {mensaje, emoticonSelected, show } = this.state
+        const {mensaje, emoticonSelected, show, modal } = this.state
         return (
             <EmojiPicker 
                 handleChangeEmoticon={this.handleChangeEmoticon}
                 handleChangeMensajeWhatsapp={this.handleChangeMensajeWhatsapp}
                 showEmojis={this.showEmojis}
+                hideEmojis={this.hideEmojis}
                 mensaje={mensaje}
                 emoticonSelected={emoticonSelected}
                 show={show}
+                modal={modal}
             />
         );
     }

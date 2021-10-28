@@ -3,8 +3,8 @@ import styles from './Style.js';
 import { withStyles } from '@material-ui/core';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import { Grid } from '@mui/material';
-import EmojisModal from '../EmojisModal/Index';
-
+import ShowEmojis from '../ShowEmojis/Index';
+import ShowEmojisModal from '../ShowEmojisModal/Index';
 import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
@@ -15,20 +15,18 @@ function EmojiPicker(props) {
     const { classes } = props
     return (
         <Grid container justify="space-between" className={classes.messageContainer}>
-            <FormControl sx={{ ml: '5%', width: '90%' }} variant="outlined" className={classes.formControlContainer}>
+            <FormControl variant="outlined" className={classes.formControlContainer}>
                 <InputLabel>Message</InputLabel>
                 <OutlinedInput
                     name="template_mensaje" 
-                    onBlur={(e) => props.handleChangeMensajeWhatsapp(e)} 
-                    defaultValue={props.mensaje} 
-                    key={props.mensaje} 
-                    // fullWidth
+                    onChange={(e) => props.handleChangeMensajeWhatsapp(e)} 
+                    // onFocus={props.hideEmojis}
+                    value={props.mensaje} 
                     multiline
                     endAdornment={
                         <InputAdornment position="end">
                             <IconButton
                                 onClick={props.showEmojis}
-                                // onMouseDown={props.showEmojis}
                                 edge="end"
                             >
                                 <EmojiEmotionsIcon className={classes.emojiSmile}/>
@@ -38,8 +36,11 @@ function EmojiPicker(props) {
                     label="Message"
                 />
             </FormControl>
-            {props.show ?
-                <EmojisModal handleChangeEmoticon={props.handleChangeEmoticon}/>
+            {props.show && !props.modal?
+                <ShowEmojis handleChangeEmoticon={props.handleChangeEmoticon} modal={props.modal}/>
+            : null}
+            {props.show && props.modal?
+                <ShowEmojisModal handleChangeEmoticon={props.handleChangeEmoticon} showEmojis={props.showEmojis} show={props.show}/>
             : null}
         </Grid>
     );
